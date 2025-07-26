@@ -4,12 +4,23 @@ const button = document.querySelector('#add-btn');
 const list = document.querySelector('#todo-list');
 const clear = document.querySelector('#clear-btn');
 let taskCount = 0;
+let tasks = [];
 
 function addTask(value) {
     if (value.trim() === '') return;
 
     taskCount++;
+
+    tasks.push(taskObj);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
     const displayText = value.trim();
+     const taskObj = {
+        id: taskCount,
+        text: displayText,
+        done: false,
+    };
+    
     const li = document.createElement('li');
     li.innerHTML = `Item #${taskCount}: <span class="task-text">${displayText}</span> <button class="delete-btn">X</button>`;
 
