@@ -62,6 +62,7 @@ if (taskFromStorage) {
         localStorage.setItem('tasks', JSON.stringify(tasks))
         
         showUndoOption();
+        updateCompletedBanner();
         });
     
 
@@ -95,6 +96,8 @@ if (taskFromStorage) {
     });
 
     list.appendChild(li);
+
+    updateCompletedBanner();
 }
 
 button.addEventListener('click', () => {
@@ -158,3 +161,15 @@ setInterval(() => {
         reminderZone.textContent = "";
     }
 }, 5000);
+
+function updateCompletedBanner() {
+    const banner = document.getElementById('completion-banner');
+    const done = tasks.filter(t => t.done).length;
+    const total = tasks.length;
+
+    if (total > 0) {
+        banner.textContent = `You've completed ${done} out of ${total} tasks.`;
+    } else {
+        banner.textContent = '';
+    }
+}
