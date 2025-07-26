@@ -114,7 +114,13 @@ button.addEventListener('click', () => {
 
 clear.addEventListener('click', () => {
     taskCount = 0;
+    tasks = [];
     list.innerHTML = '';
+    localStorage.removeItem('tasks');
+
+    document.getElementById('undo-zone').innerHTML = '';
+    document.getElementById('reminder-zone').textContent = '';
+    document.getElementById('completion-banner').textContent = '';
 });
 
 window.addEventListener('DOMContentLoaded', () => {
