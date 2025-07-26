@@ -6,30 +6,45 @@ const clear = document.querySelector('#clear-btn');
 let taskCount = 0;
 let tasks = [];
 
-function addTask(value) {
+function addTask(value, taskFromStorage = null) {
     if (value.trim() === '') return;
 
-    taskCount++;
+let taskObj;
 
-    const displayText = value.trim();
-    const taskObj = {
-        id: taskCount,
-        text: displayText,
-        done: false,
-    };
-
-    tasks.push(taskObj);
-    localStorage.setItem('tasks', JSON.stringify(tasks)); 
+if (taskFromStorage) {
+  taskObj = taskFromStorage;
+  if (taskObj.id > taskCount) {
+    taskCount = taskObj.id;
+  }
+} else {
+  taskCount++;
+  const displayText = value.trim();
+  taskObj = {
+    id: taskCount,
+    text: displayText,
+    done: false,
+  };
+  tasks.push(taskObj);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+  
+    input.value = '';
+    input.placeholder = `Last added: ${taskObj.text}`;
+    console.log(`You have added ${taskCount} items to the list.`);
+} 
 
     const li = document.createElement('li');
-    li.innerHTML = `Item #${taskCount}: <span class="task-text">${displayText}</span> <button class="delete-btn">X</button>`;
+
+    li.innerHTML = `Item #${taskObj.id}: <span class="task-text">${taskObj.text}</span> <button class="delete-btn">X</button>`;
+
+    const taskSpan = li.querySelector('.task-text');
+        if (taskObj.done) {
+        taskSpan.classList.add('done');
+    }
 
     li.querySelector('.delete-btn').addEventListener('click', (e) => {
         e.stopPropagation();
         li.remove();
     });
-
-    const taskSpan = li.querySelector('.task-text');
 
     taskSpan.addEventListener('click', () => {
         if (taskSpan.classList.contains('done')) return;
@@ -47,6 +62,8 @@ function addTask(value) {
             if (e.key === 'Enter') {
                 const newText = input.value.trim();
                 taskSpan.textContent = newText;
+                taskObj.text = newText;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
                 input.replaceWith(taskSpan);
             }
         });
@@ -54,12 +71,11 @@ function addTask(value) {
 
     li.addEventListener('click', () => {
         taskSpan.classList.toggle('done');
+        taskObj.done = taskSpan.classList.contains('done');
+        localStorage.setItem('tasks', JSON.stringify(tasks));
     });
 
     list.appendChild(li);
-    input.value = '';
-    input.placeholder = `Last added: ${displayText}`;
-    console.log(`You have added ${taskCount} items to the list.`);
 }
 
 button.addEventListener('click', () => {
@@ -69,4 +85,16 @@ button.addEventListener('click', () => {
 clear.addEventListener('click', () => {
     taskCount = 0;
     list.innerHTML = '';
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('tasks');
+
+    if (saved) {
+        tasks = JSON.parse(saved);
+        tasks.forEach(task => {
+            taskCount = task.id;
+            addTask(task.text, task);
+        });
+    }
 });
