@@ -15,9 +15,11 @@ input.placeholder = randomPrompt;
 let taskCount = 0;
 let tasks = [];
 let lastDeletedTask = null;
+let lastTaskTime = Date.now();
 
 function addTask(value, taskFromStorage = null) {
     if (value.trim() === '') return;
+    lastTaskTime = Date.now();
 
 let taskObj;
 
@@ -143,3 +145,16 @@ function showUndoOption() {
         lastDeletedTask = null;
     }, 8000);
 }
+
+setInterval(() => {
+    const now = Date.now();
+    const secondsSinceLast = Math.floor((now - lastTaskTime) / 1000);
+
+    const  reminderZone = document.getElementById('reminder-zone');
+
+    if (secondsSinceLast >= 30) {
+        reminderZone.textContent = "Still there? Add something you meant to do.";
+    } else {
+        reminderZone.textContent = "";
+    }
+}, 5000);
