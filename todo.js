@@ -91,6 +91,9 @@ if (taskFromStorage) {
                     taskSpan.classList.remove('edited');
                 }, 600);
             }
+                if (e.key === 'Escape') {
+                    input.replaceWith(taskSpan);
+                }
         });
     });
 
