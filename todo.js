@@ -14,6 +14,7 @@ input.placeholder = randomPrompt;
 
 let taskCount = 0;
 let tasks = [];
+let lastDeletedTask = null;
 
 function addTask(value, taskFromStorage = null) {
     if (value.trim() === '') return;
@@ -53,7 +54,14 @@ if (taskFromStorage) {
     li.querySelector('.delete-btn').addEventListener('click', (e) => {
         e.stopPropagation();
         li.remove();
-    });
+
+        lastDeletedTask = taskObj;
+        tasks = tasks.filter(t => t.id !== taskObj.id);  
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+        
+        showUndoOption();
+        });
+    
 
     taskSpan.addEventListener('click', () => {
         if (taskSpan.classList.contains('done')) return;
@@ -112,3 +120,26 @@ input.addEventListener('focus', () => {
     const newPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     input.placeholder = newPrompt;
 });
+
+function showUndoOption() {
+    const undoZone = document.getElementById('undo-zone');
+    undoZone.innerHTML = '';
+
+    const undoBtn = document.createElement('button');
+    undoBtn.textContent = 'Undo Delete';
+
+    undoBtn.addEventListener('click', () => {
+        if (lastDeletedTask) {
+            addTask(lastDeletedTask.text, lastDeletedTask);
+            lastDeletedTask = null;
+            undoZone.innerHTML = '';
+        }
+    });
+
+    undoZone.appendChild(undoBtn);
+
+    setTimeout(() => {
+        undoZone.innerHTML = '';
+        lastDeletedTask = null;
+    }, 8000);
+}
