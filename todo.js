@@ -85,6 +85,11 @@ if (taskFromStorage) {
                 taskObj.text = newText;
                 localStorage.setItem('tasks', JSON.stringify(tasks));
                 input.replaceWith(taskSpan);
+
+                taskSpan.classList.add('edited');
+                setTimeout(() => {
+                    taskSpan.classList.remove('edited');
+                }, 600);
             }
         });
     });
