@@ -1,8 +1,17 @@
-
 const input = document.querySelector('#todo-input');
 const button = document.querySelector('#add-btn');
 const list = document.querySelector('#todo-list');
 const clear = document.querySelector('#clear-btn');
+const prompts = ["What's your main goal today?",
+                "Add your top priority ...",
+                "Need to remember something?",
+                "Write a quick task here!",
+                "Anything you forgot to do?"
+];
+
+const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+input.placeholder = randomPrompt;
+
 let taskCount = 0;
 let tasks = [];
 
@@ -97,4 +106,9 @@ window.addEventListener('DOMContentLoaded', () => {
             addTask(task.text, task);
         });
     }
+});
+
+input.addEventListener('focus', () => {
+    const newPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    input.placeholder = newPrompt;
 });
