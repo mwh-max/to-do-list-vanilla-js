@@ -11,16 +11,16 @@ function addTask(value) {
 
     taskCount++;
 
-    tasks.push(taskObj);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
     const displayText = value.trim();
-     const taskObj = {
+    const taskObj = {
         id: taskCount,
         text: displayText,
         done: false,
     };
-    
+
+    tasks.push(taskObj);
+    localStorage.setItem('tasks', JSON.stringify(tasks)); 
+
     const li = document.createElement('li');
     li.innerHTML = `Item #${taskCount}: <span class="task-text">${displayText}</span> <button class="delete-btn">X</button>`;
 
