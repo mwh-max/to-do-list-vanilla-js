@@ -46,7 +46,8 @@ if (taskFromStorage) {
 
     const li = document.createElement('li');
 
-    li.innerHTML = `Item #${taskObj.id}: <span class="task-text">${taskObj.text}</span> <button class="delete-btn">X</button>`;
+    li.innerHTML = `Item #${taskObj.id}: <span class="task-text">${taskObj.text}</span> <button class="delete-btn" aria-label="Delete Task ${taskObj.id}">❌</button>`;
+
 
     const taskSpan = li.querySelector('.task-text');
         if (taskObj.done) {
