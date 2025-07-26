@@ -115,8 +115,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (saved) {
         tasks = JSON.parse(saved);
         tasks.forEach(task => {
-            taskCount = task.id;
-            addTask(task.text, task);
+            addTask(null, task);
         });
     }
 });
