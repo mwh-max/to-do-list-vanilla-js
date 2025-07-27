@@ -2,6 +2,12 @@ const input = document.querySelector('#todo-input');
 const button = document.querySelector('#add-btn');
 const list = document.querySelector('#todo-list');
 const clear = document.querySelector('#clear-btn');
+input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+        button.click();
+    }
+})
+
 const prompts = ["What's your main goal today?",
                 "Add your top priority ...",
                 "Need to remember something?",
