@@ -50,12 +50,53 @@ if (taskFromStorage) {
     console.log(`You have added ${taskCount} items to the list.`);
 } 
 
+function makeTaskSpan(text, taskObj) {
+    const span = document.createElement('span');
+    span.className = 'task-text';
+    span.textContent = text;
+
+    span.addEventListener('click', () => {
+        if (span.classList.contains('done')) return;
+
+        const originalText = span.textContent.trim();
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = originalText;
+
+        span.replaceWith(input);
+        input.focus();
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const newText = input.value.trim();
+                const newSpan = makeTaskSpan(newText, taskObj);
+                taskObj.text = newText;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                input.replaceWith(newSpan);
+
+                newSpan.classList.add('edited');
+                setTimeout(() => {
+                    newSpan.classList.add('edited');
+                }, 600);
+            } else if (e.key === 'Escape') {
+                const restoredSpan = makeTaskSpan(originalText, taskObj);
+                input.replaceWith(restoredSpan);
+            }
+        });
+    });
+        return span;
+}
+
+
+    const taskSpan = makeTaskSpan(taskObj.text, taskObj);
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.setAttribute('aria-label', `Delete Task ${taskObj.id}`);
+    deleteBtn.textContent = '❌';
+
     const li = document.createElement('li');
+    li.append(`Item #${taskObj.id}: `, taskSpan, deleteBtn);
 
-    li.innerHTML = `Item #${taskObj.id}: <span class="task-text">${taskObj.text}</span> <button class="delete-btn" aria-label="Delete Task ${taskObj.id}">❌</button>`;
-
-
-    const taskSpan = li.querySelector('.task-text');
         if (taskObj.done) {
         taskSpan.classList.add('done');
     }
@@ -72,74 +113,6 @@ if (taskFromStorage) {
         updateCompletedBanner();
         });
     
-
-    taskSpan.addEventListener('click', () => {
-        if (taskSpan.classList.contains('done')) return;
-
-        const originalText = taskSpan.textContent.trim();
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = originalText;
-        input.size = originalText.length + 5;
-        
-        taskSpan.replaceWith(input);
-        input.focus();
-
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const newText = input.value.trim();
-                taskSpan.textContent = newText;
-                taskObj.text = newText;
-                localStorage.setItem('tasks', JSON.stringify(tasks));
-                input.replaceWith(taskSpan);
-
-                taskSpan.classList.add('edited');
-                setTimeout(() => {
-                    taskSpan.classList.remove('edited');
-                }, 600);
-            }
-                else if (e.key === 'Escape') {
-                    const restoredSpan = document.createElement('span');
-                    restoredSpan.className = 'task-text';
-                    restoredSpan.textContent = originalText;
-
-                    input.replaceWith(restoredSpan);
-
-                    restoredSpan.addEventListener('click', () => {
-                        if (restoredSpan.classList.contains('done')) return;
-
-                        const originalText = restoredSpan.textContent.trim();
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.value = originalText;
-                        input.size = originalText.length + 5;
-
-                        input.addEventListener('keydown', (e) => {
-                            if (e.key === 'Enter') {
-                                const newText = input.value.trim();
-                                const newSpan = document.createElement('span');
-                                
-                                newSpan.className = 'task-text';
-                                newSpan.textContent = newText;
-                                taskObj.text = newText;
-                                localStorage.setItem('tasks', JSON.stringify(tasks));
-                                input.replaceWith(newSpan);
-
-                                newSpan.classList.add('edited');
-                                setTimeout(() => {
-                                    newSpan.classList.remove('edited');
-                                }, 600);
-
-                                newSpan.addEventListener('click', restoredSpan.click);
-                            } else if (e.key === 'Escape') {
-                                input.replaceWith(restoredSpan);
-                            }
-                        })
-                    })
-                }
-        });
-    });
-
     li.addEventListener('click', () => {
         taskSpan.classList.toggle('done');
         taskObj.done = taskSpan.classList.contains('done');
