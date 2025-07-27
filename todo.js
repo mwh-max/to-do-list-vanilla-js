@@ -99,8 +99,43 @@ if (taskFromStorage) {
                 }, 600);
             }
                 else if (e.key === 'Escape') {
-                    taskSpan.textContent = originalText;
-                    input.replaceWith(taskSpan);
+                    const restoredSpan = document.createElement('span');
+                    restoredSpan.className = 'task-text';
+                    restoredSpan.textContent = originalText;
+
+                    input.replaceWith(restoredSpan);
+
+                    restoredSpan.addEventListener('click', () => {
+                        if (restoredSpan.classList.contains('done')) return;
+
+                        const originalText = restoredSpan.textContent.trim();
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.value = originalText;
+                        input.size = originalText.length + 5;
+
+                        input.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                const newText = input.value.trim();
+                                const newSpan = document.createElement('span');
+                                
+                                newSpan.className = 'task-text';
+                                newSpan.textContent = newText;
+                                taskObj.text = newText;
+                                localStorage.setItem('tasks', JSON.stringify(tasks));
+                                input.replaceWith(newSpan);
+
+                                newSpan.classList.add('edited');
+                                setTimeout(() => {
+                                    newSpan.classList.remove('edited');
+                                }, 600);
+
+                                newSpan.addEventListener('click', restoredSpan.click);
+                            } else if (e.key === 'Escape') {
+                                input.replaceWith(restoredSpan);
+                            }
+                        })
+                    })
                 }
         });
     });
