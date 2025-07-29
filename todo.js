@@ -100,18 +100,6 @@ function makeTaskSpan(text, taskObj) {
         if (taskObj.done) {
         taskSpan.classList.add('done');
     }
-
-    li.querySelector('.delete-btn').addEventListener('click', (e) => {
-        e.stopPropagation();
-        li.remove();
-
-        lastDeletedTask = taskObj;
-        tasks = tasks.filter(t => t.id !== taskObj.id);  
-        localStorage.setItem('tasks', JSON.stringify(tasks))
-        
-        showUndoOption();
-        updateCompletedBanner();
-        });
     
     li.addEventListener('click', () => {
         taskSpan.classList.toggle('done');
@@ -123,6 +111,26 @@ function makeTaskSpan(text, taskObj) {
 
     updateCompletedBanner();
 }
+
+list.addEventListener('click', function (e) {
+   if (e.target.matches('.delete-btn')) {
+    const li = e.target.closest('li');
+    const label = e.target.getAttribute('aria-label');
+    const taskId = parseInt(label.split(' ')[2]);
+
+    const taskObj = tasks.find(t => t.id === taskId);
+    lastDeletedTask = taskObj;
+
+    tasks = tasks.filter(t => t.id !== taskId);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    li.remove();
+
+    showUndoOption();
+    updateCompletedBanner();
+
+   } 
+});
 
 button.addEventListener('click', () => {
     addTask(input.value);
@@ -164,6 +172,7 @@ function showUndoOption() {
 
     undoBtn.addEventListener('click', () => {
         if (lastDeletedTask) {
+            lastDeletedTask.done = false;
             addTask(lastDeletedTask.text, lastDeletedTask);
             lastDeletedTask = null;
             undoZone.innerHTML = '';
