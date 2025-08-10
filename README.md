@@ -36,3 +36,14 @@ The state (`tasks[]`) is stored in memory and persisted with `localStorage`, dem
 - Mark tasks done by clicking.
 - Try deleting and undoing quickly.
 - Reload the page — tasks are saved in localStorage.
+
+## Recent Updates (Refactor – August 2025)
+
+- **Prevented accidental completion toggle** when clicking task text to edit
+- **Blocked empty renames** – if user clears a task name, the original text is restored
+- **Kept completion banner in sync** when toggling tasks
+- General code cleanup:
+  - Standardized event handling
+  - Reduced duplicate logic for add button
+  - Improved undo restore behavior with array reinsertion
+- All changes merged into `main` via PR for clean commit history
