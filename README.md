@@ -1,6 +1,14 @@
-# To-Do List (Vanilla JS)
+# To-Do List – Vanilla JavaScript
 
-Simple but logic-rich to-do app built with HTML, CSS and plain JavaScript. No frameworks, no shortcuts. Designed to showcase DOM manipulation, keyboard UX and clean state handling in a single-page app.
+A clean, responsive task manager built with pure JavaScript, HTML and CSS — no frameworks, no dependencies.  
+Features inline editing, undo delete, smart prompts and a live completion tracker, all in a single lightweight app.
+
+Designed as a showcase of front-end fundamentals:
+
+- **DOM manipulation** for dynamic task creation and updates
+- **LocalStorage persistence** to keep tasks between sessions
+- **Accessible controls** with ARIA labels and keyboard support
+- **Polished UX** including animated edit highlights and contextual prompts
 
 ## Features
 
